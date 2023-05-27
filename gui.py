@@ -40,42 +40,42 @@ def draw_board():
                          (X_OFFSET, i * CELL_SIZE + Y_OFFSET),
                          (X_OFFSET + BOARD_LENGTH, i * CELL_SIZE + Y_OFFSET))
 
-        # 边框
-        offset = 10
-        line_width = 2
-        pygame.draw.line(window, BLACK,
-                         (X_OFFSET - offset, Y_OFFSET - offset),
-                         (X_OFFSET + BOARD_LENGTH + offset, Y_OFFSET - offset),
-                         line_width)
-        pygame.draw.line(window, BLACK,
-                         (X_OFFSET + BOARD_LENGTH + offset, Y_OFFSET - offset),
-                         (X_OFFSET + BOARD_LENGTH + offset, Y_OFFSET + BOARD_LENGTH + offset),
-                         line_width)
-        pygame.draw.line(window, BLACK,
-                         (X_OFFSET + BOARD_LENGTH + offset, Y_OFFSET + BOARD_LENGTH + offset),
-                         (X_OFFSET - offset, Y_OFFSET + BOARD_LENGTH + offset),
-                         line_width)
-        pygame.draw.line(window, BLACK,
-                         (X_OFFSET - offset, Y_OFFSET + BOARD_LENGTH + offset),
-                         (X_OFFSET - offset, Y_OFFSET - offset),
-                         line_width)
+    # 边框
+    offset = 10
+    line_width = 2
+    pygame.draw.line(window, BLACK,
+                     (X_OFFSET - offset, Y_OFFSET - offset),
+                     (X_OFFSET + BOARD_LENGTH + offset, Y_OFFSET - offset),
+                     line_width)
+    pygame.draw.line(window, BLACK,
+                     (X_OFFSET + BOARD_LENGTH + offset, Y_OFFSET - offset),
+                     (X_OFFSET + BOARD_LENGTH + offset, Y_OFFSET + BOARD_LENGTH + offset),
+                     line_width)
+    pygame.draw.line(window, BLACK,
+                     (X_OFFSET + BOARD_LENGTH + offset, Y_OFFSET + BOARD_LENGTH + offset),
+                     (X_OFFSET - offset, Y_OFFSET + BOARD_LENGTH + offset),
+                     line_width)
+    pygame.draw.line(window, BLACK,
+                     (X_OFFSET - offset, Y_OFFSET + BOARD_LENGTH + offset),
+                     (X_OFFSET - offset, Y_OFFSET - offset),
+                     line_width)
 
-        # 星位
-        point_size = 4
-        points = [
-            (3, 3),
-            (3, 9),
-            (3, 15),
-            (9, 3),
-            (9, 9),
-            (9, 15),
-            (15, 3),
-            (15, 9),
-            (15, 15)
-        ]
-        for x, y in points:
-            position = (X_OFFSET + x * CELL_SIZE, Y_OFFSET + y * CELL_SIZE)
-            pygame.draw.circle(window, BLACK, position, point_size)
+    # 星位
+    point_size = 4
+    points = [
+        (3, 3),
+        (3, 9),
+        (3, 15),
+        (9, 3),
+        (9, 9),
+        (9, 15),
+        (15, 3),
+        (15, 9),
+        (15, 15)
+    ]
+    for x, y in points:
+        position = (X_OFFSET + x * CELL_SIZE, Y_OFFSET + y * CELL_SIZE)
+        pygame.draw.circle(window, BLACK, position, point_size)
 
 
 def draw_piece(x, y, color):
@@ -109,7 +109,7 @@ while running:
 
         # 处理其他事件，例如鼠标点击，添加棋子等
         if event.type == pygame.MOUSEBUTTONDOWN:
-            # 判断是否是鼠标左键被按下
+            # 左键下棋
             if event.button == 1:  # 1 代表鼠标左键
                 x_pos, y_pos = event.pos
                 x_board, y_board = position_translate(x_pos, y_pos)
@@ -125,7 +125,8 @@ while running:
                                                  and (x_board, y_board, WHITE) not in BOARD):
                     BOARD.append((x_board, y_board, current_color))
                     current_color = BLACK
-
+                    
+            # 右键悔棋
             elif event.button == 3:  # 3 代表鼠标右键
                 if len(BOARD) > 0:
                     BOARD.remove(BOARD[-1])

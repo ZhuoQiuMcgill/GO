@@ -1,4 +1,6 @@
 import numpy as np
+import StoneSet
+from collections import deque
 
 
 class Board:
@@ -10,6 +12,10 @@ class Board:
         self.size = size
         self.board = np.zeros((size, size), dtype=int)
         self.next_player = 1
+        # self.stone_sets = []
+        # for i in range (size):
+        #     for j in range (size):
+        #         self.stone_sets.append()
 
         #打劫
         self.last_Ko_x = None
@@ -34,6 +40,19 @@ class Board:
             self.board[x][y] = -1
             self.check_capture(self, -1, x, y)
             self.next_player = 1
+
+    # def move_union(self, current_player, x, y):
+    #     top = self.board[x - 1, y] if x > 0 else None
+    #     bottom = self.board[x + 1, y] if x < self.size - 1 else None
+    #     left = self.board[x, y - 1] if y > 0 else None
+    #     right = self.board[x, y + 1] if y < self.size - 1 else None
+    #     # if top != current_player and bottom != current_player and left != current_player and right != current_player:
+    #     #     self.stone_sets.append(StoneSet.StoneSet(x, y))
+    #     else:
+    #         if top == current_player:
+
+
+
 
     def check_capture(self, current_player, x, y):
         capt_num = 0
@@ -63,6 +82,18 @@ class Board:
             return
 
     def check_suicide(self, current_player, x, y):
+        visited = set()
+        queue = deque([x, y])
+
+        while queue:
+            node = queue.popleft()
+            x_val = node[0]
+            y_val = node[1]
+            top = self.board[x_val - 1, y_val] if x > 0 else None
+            bottom = self.board[x_val + 1, y_val] if x < self.size - 1 else None
+            left = self.board[x_val, y_val - 1] if y > 0 else None
+            right = self.board[x_val, y_val + 1] if y < self.size - 1 else None
+            if node not in visited:
 
 
 

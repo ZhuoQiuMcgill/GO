@@ -1,4 +1,5 @@
 import pygame
+from Board import *
 
 # 初始化 Pygame
 pygame.init()
@@ -98,7 +99,9 @@ def position_translate(x, y):
 
 
 # 初始化棋盘
+# (x, y, BLACK/WHITE)
 BOARD = []
+GAME_BOARD = Board(BOARD_SIZE)
 
 running = True
 current_color = BLACK
@@ -113,6 +116,7 @@ while running:
             if event.button == 1:  # 1 代表鼠标左键
                 x_pos, y_pos = event.pos
                 x_board, y_board = position_translate(x_pos, y_pos)
+                print(x_board, y_board)
 
                 # 添加黑子
                 if current_color == BLACK and ((x_board, y_board, BLACK) not in BOARD

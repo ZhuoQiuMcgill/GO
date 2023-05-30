@@ -19,6 +19,8 @@ MEMORY = [[]]
 CURRENT_BOARD = []
 GAME_BOARD = Board(BOARD_SIZE)
 CURRENT_COLOR = BLACK
+BLACK_POS, WHITE_POS = [], []
+
 
 # 计算窗口的大小
 WINDOW_SIZE = 800
@@ -101,6 +103,23 @@ def draw_piece(x, y, color):
         pygame.draw.circle(window, BLACK, position, PIECE_SIZE)
 
 
+def draw_territory(b_t, w_t):
+    rect_size = CELL_SIZE // 3
+    for x, y in b_t:
+        center = (X_OFFSET + x * CELL_SIZE, Y_OFFSET + y * CELL_SIZE)
+        left = center[0] - rect_size // 2
+        top = center[1] - rect_size // 2
+        # print(x, y, ":", left, top)
+
+        pygame.draw.rect(window, BLACK, pygame.Rect(left, top, rect_size, rect_size))
+
+    for x, y in w_t:
+        center = (X_OFFSET + x * CELL_SIZE, Y_OFFSET + y * CELL_SIZE)
+        left = center[0] - rect_size // 2
+        top = center[1] - rect_size // 2
+        pygame.draw.rect(window, WHITE, pygame.Rect(left, top, rect_size, rect_size))
+
+
 def position_translate(x, y):
     if x < X_OFFSET or x > X_OFFSET + BOARD_LENGTH or y < Y_OFFSET or y > Y_OFFSET + BOARD_LENGTH:
         return -1, -1
@@ -144,8 +163,11 @@ while running:
                     MEMORY.append(new_board[:])
                     CURRENT_COLOR = BLACK
                 # print("MEMORY:", MEMORY[-1])
-                black_territory, white_territory = GAME_BOARD.count_territory()
+
+                black_territory, white_territory, BLACK_POS, WHITE_POS = GAME_BOARD.count_territory()
+
                 print("Black:", black_territory, "\nWhite:", white_territory)
+
             # 右键悔棋
             elif event.button == 3:  # 3 代表鼠标右键
                 if len(MEMORY) > 1:
@@ -155,8 +177,9 @@ while running:
                     else:
                         CURRENT_COLOR = WHITE
                 # print("MEMORY:", MEMORY[-1])
-
-                # 清空窗口
+                GAME_BOARD.translate(MEMORY[-1])
+                black_territory, white_territory, BLACK_POS, WHITE_POS = GAME_BOARD.count_territory()
+    # 清空窗口
     window.fill((222, 184, 135))
     # 渲染棋盘
     draw_board()
@@ -164,6 +187,9 @@ while running:
     # 渲染棋子
     for x, y, color in MEMORY[-1]:
         draw_piece(x, y, color)
+
+    # 渲染地盘
+    draw_territory(BLACK_POS, WHITE_POS)
 
     # 更新显示
     pygame.display.flip()

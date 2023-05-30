@@ -213,6 +213,8 @@ class Board:
         visited = [[False] * n for _ in range(n)]
         black_territory = 0
         white_territory = 0
+        black_pos = []
+        white_pos = []
 
         def dfs(x, y, color):
             nonlocal black_territory, white_territory
@@ -221,8 +223,10 @@ class Board:
             visited[x][y] = True
             if color == 1:
                 black_territory += 1
+                black_pos.append((x, y))
             elif color == -1:
                 white_territory += 1
+                white_pos.append((x, y))
             for i in range(4):
                 new_x = x + dx[i]
                 new_y = y + dy[i]
@@ -245,4 +249,4 @@ class Board:
                 if self.board[i][j] == 0 and not visited[i][j]:
                     dfs(i, j, None)
 
-        return black_territory, white_territory
+        return black_territory, white_territory, black_pos, white_pos

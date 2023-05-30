@@ -89,7 +89,6 @@ class Board:
         else:
             self.Ko = False
 
-
     # def move_union(self, current_player, x, y):
     #     top = self.board[x - 1, y] if x > 0 else None
     #     bottom = self.board[x + 1, y] if x < self.size - 1 else None

@@ -226,7 +226,7 @@ class Board:
                 black_pos.append((x, y))
             elif color == -1:
                 white_territory += 1
-                white_pos.append(x, y)
+                white_pos.append((x, y))
             for i in range(4):
                 new_x = x + dx[i]
                 new_y = y + dy[i]

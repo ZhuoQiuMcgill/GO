@@ -42,7 +42,7 @@ class Board:
             self.ko_check(x, y)
         else:
             self.Ko = False
-        self.moves.append((x, y, 1))
+        self.moves.append((x, y, Constant.BLACK))
         self.next_player = -1
         return self.moves.copy()
 
@@ -64,7 +64,7 @@ class Board:
             self.ko_check(x, y)
         else:
             self.Ko = False
-        self.moves.append((x, y, 1))
+        self.moves.append((x, y, Constant.WHITE))
         self.next_player = 1
         return self.moves.copy()
 
@@ -186,4 +186,9 @@ class Board:
 
     def translate(self, move_stack):
         for m in move_stack:
-            self.board[m[0]][m[1]] = m[2]
+            if m[2] == Constant.BLACK:
+                self.board[m[0]][m[1]] = 1
+            elif m[2] == Constant.WHITE:
+                self.board[m[0]][m[1]] = -1
+            else:
+                print("convert error")

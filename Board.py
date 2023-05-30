@@ -1,6 +1,7 @@
 import numpy as np
 import StoneSet
 from collections import deque
+import Constant
 
 
 class Board:
@@ -182,3 +183,7 @@ class Board:
             self.next_player = -1
         elif self.next_player == -1:
             self.next_player = 1
+
+    def translate(self, move_stack):
+        for m in move_stack:
+            self.board[m[0]][m[1]] = m[2]

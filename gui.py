@@ -97,7 +97,7 @@ def position_translate(x, y):
 
 # 初始化棋盘
 # (x, y, BLACK/WHITE)
-MEMORY = []
+MEMORY = [[]]
 CURRENT_BOARD = []
 GAME_BOARD = Board(BOARD_SIZE)
 
@@ -112,38 +112,49 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             # 左键下棋
             if event.button == 1:  # 1 代表鼠标左键
+                print("last board", MEMORY[-1])
+                GAME_BOARD.translate(MEMORY[-1])
                 x_pos, y_pos = event.pos
                 x_board, y_board = position_translate(x_pos, y_pos)
                 if (x_board, y_board) == (-1, -1):
                     continue
-                print(x_board, y_board)
 
                 # 添加黑子
                 if current_color == BLACK:
-
+                    new_board = GAME_BOARD.black_move(x_board, y_board)
+                    if type(new_board) is str:
+                        print(new_board)
+                        continue
+                    MEMORY.append(new_board[:])
                     current_color = WHITE
 
                 # 添加白子
                 elif current_color == WHITE:
+                    new_board = GAME_BOARD.white_move(x_board, y_board)
+                    if type(new_board) is str:
+                        print(new_board)
+                        continue
+                    MEMORY.append(new_board[:])
                     current_color = BLACK
-                    
+                print("MEMORY:", MEMORY)
             # 右键悔棋
             elif event.button == 3:  # 3 代表鼠标右键
-                if len(BOARD) > 0:
-                    BOARD.remove(BOARD[-1])
+                if len(MEMORY) > 1:
+                    MEMORY.remove(MEMORY[-1])
                     if current_color == WHITE:
                         current_color = BLACK
                     else:
                         current_color = WHITE
+                print("MEMORY:", MEMORY)
 
-    # 清空窗口
+                # 清空窗口
     window.fill((222, 184, 135))
 
     # 渲染棋盘
     draw_board()
 
     # 渲染棋子
-    for x, y, color in BOARD:
+    for x, y, color in MEMORY[-1]:
         draw_piece(x, y, color)
 
     # 更新显示

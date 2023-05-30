@@ -150,7 +150,7 @@ class Board:
         #         capt_num += self.check_suicide(self, current_player, x, y - 1)
         #     if right == 1:
         #         capt_num += self.check_suicide(self, current_player, x, y + 1)
-        print(capt_num)
+        # print(capt_num)
         return capt_num
 
     # 检测一块棋是否还有气， BFS
@@ -160,8 +160,8 @@ class Board:
 
         while queue:
             node = queue.popleft()
-            print(queue)
-            print(node)
+            # print(queue)
+            # print(node)
             if node not in visited:
                 x_val = node[0]
                 y_val = node[1]
@@ -169,7 +169,7 @@ class Board:
                 bottom = self.board[x_val + 1, y_val] if x_val < self.size - 1 else None
                 left = self.board[x_val, y_val - 1] if y_val > 0 else None
                 right = self.board[x_val, y_val + 1] if y_val < self.size - 1 else None
-                print(top, bottom, left, right)
+                # print(top, bottom, left, right)
                 visited.add(node)
 
                 if top == 0 or bottom == 0 or left == 0 or right == 0:
@@ -184,7 +184,7 @@ class Board:
                     if right == current_player and (x_val, y_val + 1) not in visited:
                         queue.append((x_val, y_val + 1))
 
-        print(visited)
+        # print(visited)
         for x_, y_ in visited:
             self.board[x_][y_] = 0
         return len(visited)
@@ -205,3 +205,44 @@ class Board:
             else:
                 print("convert error")
         self.board = temp_b
+
+    def count_territory(self):
+        n = len(self.board)
+        dx = [-1, 0, 1, 0]
+        dy = [0, 1, 0, -1]
+        visited = [[False] * n for _ in range(n)]
+        black_territory = 0
+        white_territory = 0
+
+        def dfs(x, y, color):
+            nonlocal black_territory, white_territory
+            if not (0 <= x < n and 0 <= y < n) or visited[x][y] or self.board[x][y] != 0:
+                return color
+            visited[x][y] = True
+            if color == 1:
+                black_territory += 1
+            elif color == -1:
+                white_territory += 1
+            for i in range(4):
+                new_x = x + dx[i]
+                new_y = y + dy[i]
+                if 0 <= new_x < n and 0 <= new_y < n:
+                    if self.board[new_x][new_y] != 0:
+                        if color is None:
+                            color = self.board[new_x][new_y]
+                        elif color != self.board[new_x][new_y]:
+                            return 0
+                    else:
+                        temp = dfs(new_x, new_y, color)
+                        if temp == 0:
+                            return 0
+                        elif color is None:
+                            color = temp
+            return color
+
+        for i in range(n):
+            for j in range(n):
+                if self.board[i][j] == 0 and not visited[i][j]:
+                    dfs(i, j, None)
+
+        return black_territory, white_territory

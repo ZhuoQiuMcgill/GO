@@ -1,6 +1,7 @@
 import pygame
 from Board import *
 from Constant import *
+
 # 初始化 Pygame
 pygame.init()
 
@@ -13,11 +14,18 @@ PIECE_SIZE = CELL_SIZE // 2.2
 X_OFFSET = 50
 Y_OFFSET = 50
 
+# 初始化棋盘
+MEMORY = [[]]
+CURRENT_BOARD = []
+GAME_BOARD = Board(BOARD_SIZE)
+CURRENT_COLOR = BLACK
+
 # 计算窗口的大小
 WINDOW_SIZE = 800
 
 # 创建窗口
 window = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
+running = True
 
 # 设置窗口标题
 pygame.display.set_caption('围棋')
@@ -74,6 +82,13 @@ def draw_board():
         position = (X_OFFSET + x * CELL_SIZE, Y_OFFSET + y * CELL_SIZE)
         pygame.draw.circle(window, BLACK, position, point_size)
 
+    # 渲染当前颜色
+    x_offset = X_OFFSET + CELL_SIZE * 9
+    y_offset = Y_OFFSET - CELL_SIZE
+
+    pygame.draw.circle(window, BLACK, (x_offset, y_offset), PIECE_SIZE)
+    pygame.draw.circle(window, CURRENT_COLOR, (x_offset, y_offset), PIECE_SIZE - 1)
+
 
 # 棋子渲染方程
 def draw_piece(x, y, color):
@@ -95,14 +110,6 @@ def position_translate(x, y):
     return int(x_board), int(y_board)
 
 
-# 初始化棋盘
-# (x, y, BLACK/WHITE)
-MEMORY = [[]]
-CURRENT_BOARD = []
-GAME_BOARD = Board(BOARD_SIZE)
-
-running = True
-current_color = BLACK
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -120,36 +127,37 @@ while running:
                     continue
 
                 # 添加黑子
-                if current_color == BLACK:
+                if CURRENT_COLOR == BLACK:
                     new_board = GAME_BOARD.black_move(x_board, y_board)
                     if type(new_board) is str:
                         print(new_board)
                         continue
                     MEMORY.append(new_board[:])
-                    current_color = WHITE
+                    CURRENT_COLOR = WHITE
 
                 # 添加白子
-                elif current_color == WHITE:
+                elif CURRENT_COLOR == WHITE:
                     new_board = GAME_BOARD.white_move(x_board, y_board)
                     if type(new_board) is str:
                         print(new_board)
                         continue
                     MEMORY.append(new_board[:])
-                    current_color = BLACK
+                    CURRENT_COLOR = BLACK
                 # print("MEMORY:", MEMORY[-1])
+                black_territory, white_territory = GAME_BOARD.count_territory()
+                print("Black:", black_territory, "\nWhite:", white_territory)
             # 右键悔棋
             elif event.button == 3:  # 3 代表鼠标右键
                 if len(MEMORY) > 1:
                     MEMORY.remove(MEMORY[-1])
-                    if current_color == WHITE:
-                        current_color = BLACK
+                    if CURRENT_COLOR == WHITE:
+                        CURRENT_COLOR = BLACK
                     else:
-                        current_color = WHITE
+                        CURRENT_COLOR = WHITE
                 # print("MEMORY:", MEMORY[-1])
 
                 # 清空窗口
     window.fill((222, 184, 135))
-
     # 渲染棋盘
     draw_board()
 

@@ -19,7 +19,6 @@ class Board:
         #         self.stone_sets.append()
 
         # 打劫
-        self.moves = []
         self.Ko = False
         self.last_Ko_x = None
         self.last_Ko_y = None
@@ -42,9 +41,15 @@ class Board:
             self.ko_check(x, y)
         else:
             self.Ko = False
-        self.moves.append((x, y, Constant.BLACK))
         self.next_player = -1
-        return self.moves.copy()
+        moves = []
+        for i in range(Constant.BOARD_SIZE):
+            for j in range(Constant.BOARD_SIZE):
+                if self.board[i][j] == 1:
+                    moves.append((i, j, Constant.BLACK))
+                elif self.board[i][j] == -1:
+                    moves.append((i, j, Constant.WHITE))
+        return moves
 
     def white_move(self, x, y):
         if self.Ko and x == self.last_Ko_x and y == self.last_Ko_y:
@@ -64,9 +69,15 @@ class Board:
             self.ko_check(x, y)
         else:
             self.Ko = False
-        self.moves.append((x, y, Constant.WHITE))
         self.next_player = 1
-        return self.moves.copy()
+        moves = []
+        for i in range(Constant.BOARD_SIZE):
+            for j in range(Constant.BOARD_SIZE):
+                if self.board[i][j] == 1:
+                    moves.append((i, j, Constant.BLACK))
+                elif self.board[i][j] == -1:
+                    moves.append((i, j, Constant.WHITE))
+        return moves
 
     def ko_check(self, x, y):
         count = 0
@@ -185,7 +196,7 @@ class Board:
             self.next_player = 1
 
     def translate(self, move_stack):
-        temp_b = np.zeros((size, size), dtype=int)
+        temp_b = np.zeros((Constant.BOARD_SIZE, Constant.BOARD_SIZE), dtype=int)
         for m in move_stack:
             if m[2] == Constant.BLACK:
                 temp_b[m[0]][m[1]] = 1

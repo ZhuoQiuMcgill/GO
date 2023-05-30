@@ -136,7 +136,7 @@ while running:
                         continue
                     MEMORY.append(new_board[:])
                     current_color = BLACK
-                print("MEMORY:", MEMORY)
+                print("MEMORY:", MEMORY[-1])
             # 右键悔棋
             elif event.button == 3:  # 3 代表鼠标右键
                 if len(MEMORY) > 1:
@@ -145,7 +145,7 @@ while running:
                         current_color = BLACK
                     else:
                         current_color = WHITE
-                print("MEMORY:", MEMORY)
+                print("MEMORY:", MEMORY[-1])
 
                 # 清空窗口
     window.fill((222, 184, 135))

@@ -1,11 +1,10 @@
 import pygame
 from Board import *
-
+from Constant import *
 # 初始化 Pygame
 pygame.init()
 
 # 定义棋盘和棋子的大小
-BOARD_SIZE = 19
 CELL_SIZE = 30
 BOARD_LENGTH = (BOARD_SIZE - 1) * CELL_SIZE
 PIECE_SIZE = CELL_SIZE // 2.2
@@ -13,10 +12,6 @@ PIECE_SIZE = CELL_SIZE // 2.2
 # 定义棋盘左上角位置
 X_OFFSET = 50
 Y_OFFSET = 50
-
-# 定义颜色
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
 
 # 计算窗口的大小
 WINDOW_SIZE = 800
@@ -102,7 +97,8 @@ def position_translate(x, y):
 
 # 初始化棋盘
 # (x, y, BLACK/WHITE)
-BOARD = []
+MEMORY = []
+CURRENT_BOARD = []
 GAME_BOARD = Board(BOARD_SIZE)
 
 running = True
@@ -123,15 +119,12 @@ while running:
                 print(x_board, y_board)
 
                 # 添加黑子
-                if current_color == BLACK and ((x_board, y_board, BLACK) not in BOARD
-                                               and (x_board, y_board, WHITE) not in BOARD):
-                    BOARD.append((x_board, y_board, current_color))
+                if current_color == BLACK:
+
                     current_color = WHITE
 
                 # 添加白子
-                elif current_color == WHITE and ((x_board, y_board, BLACK) not in BOARD
-                                                 and (x_board, y_board, WHITE) not in BOARD):
-                    BOARD.append((x_board, y_board, current_color))
+                elif current_color == WHITE:
                     current_color = BLACK
                     
             # 右键悔棋

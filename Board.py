@@ -61,7 +61,7 @@ class Board:
         # 如果没有吃子，检测是否不入气
         if captured == 0:
             self.Ko = False
-            if self.check_suicide(1, x, y) > 0:
+            if self.check_suicide(-1, x, y) > 0:
                 self.board[x][y] = 0
                 return "Suicide error"
         # 如果只吃一子，检测打劫

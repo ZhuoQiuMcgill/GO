@@ -112,7 +112,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             # 左键下棋
             if event.button == 1:  # 1 代表鼠标左键
-                print("last board", MEMORY[-1])
+                # print("last board", MEMORY[-1])
                 GAME_BOARD.translate(MEMORY[-1])
                 x_pos, y_pos = event.pos
                 x_board, y_board = position_translate(x_pos, y_pos)
@@ -136,7 +136,7 @@ while running:
                         continue
                     MEMORY.append(new_board[:])
                     current_color = BLACK
-                print("MEMORY:", MEMORY[-1])
+                # print("MEMORY:", MEMORY[-1])
             # 右键悔棋
             elif event.button == 3:  # 3 代表鼠标右键
                 if len(MEMORY) > 1:
@@ -145,7 +145,7 @@ while running:
                         current_color = BLACK
                     else:
                         current_color = WHITE
-                print("MEMORY:", MEMORY[-1])
+                # print("MEMORY:", MEMORY[-1])
 
                 # 清空窗口
     window.fill((222, 184, 135))

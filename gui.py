@@ -28,6 +28,7 @@ window = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
 pygame.display.set_caption('围棋')
 
 
+# 棋盘渲染方程
 def draw_board():
     for i in range(BOARD_SIZE):
 
@@ -79,6 +80,7 @@ def draw_board():
         pygame.draw.circle(window, BLACK, position, point_size)
 
 
+# 棋子渲染方程
 def draw_piece(x, y, color):
     position = (X_OFFSET + x * CELL_SIZE, Y_OFFSET + y * CELL_SIZE)
 
@@ -95,7 +97,7 @@ def position_translate(x, y):
 
     x_board = (x - X_OFFSET + CELL_SIZE / 2) // CELL_SIZE
     y_board = (y - Y_OFFSET + CELL_SIZE / 2) // CELL_SIZE
-    return x_board, y_board
+    return int(x_board), int(y_board)
 
 
 # 初始化棋盘
@@ -116,6 +118,8 @@ while running:
             if event.button == 1:  # 1 代表鼠标左键
                 x_pos, y_pos = event.pos
                 x_board, y_board = position_translate(x_pos, y_pos)
+                if (x_board, y_board) == (-1, -1):
+                    continue
                 print(x_board, y_board)
 
                 # 添加黑子
@@ -142,10 +146,10 @@ while running:
     # 清空窗口
     window.fill((222, 184, 135))
 
-    # 绘制棋盘
+    # 渲染棋盘
     draw_board()
 
-    # 绘制棋子
+    # 渲染棋子
     for x, y, color in BOARD:
         draw_piece(x, y, color)
 

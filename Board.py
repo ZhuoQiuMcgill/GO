@@ -185,10 +185,12 @@ class Board:
             self.next_player = 1
 
     def translate(self, move_stack):
+        temp_b = np.zeros((size, size), dtype=int)
         for m in move_stack:
             if m[2] == Constant.BLACK:
-                self.board[m[0]][m[1]] = 1
+                temp_b[m[0]][m[1]] = 1
             elif m[2] == Constant.WHITE:
-                self.board[m[0]][m[1]] = -1
+                temp_b[m[0]][m[1]] = -1
             else:
                 print("convert error")
+        self.board = temp_b

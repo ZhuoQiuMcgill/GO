@@ -110,7 +110,6 @@ def draw_territory(b_t, w_t):
         center = (X_OFFSET + x * CELL_SIZE, Y_OFFSET + y * CELL_SIZE)
         left = center[0] - rect_size // 2
         top = center[1] - rect_size // 2
-        # print(x, y, ":", left, top)
 
         pygame.draw.rect(window, BLACK, pygame.Rect(left, top, rect_size, rect_size))
 
@@ -130,6 +129,7 @@ def position_translate(x, y):
     return int(x_board), int(y_board)
 
 
+# 主程序循环
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -171,6 +171,7 @@ while running:
                 black_territory, white_territory, BLACK_POS, WHITE_POS = GAME_BOARD.count_territory()
 
                 print("Step", STEP_COUNTER, "( Black:", black_territory, "\tWhite:", white_territory, ")")
+
 
             # 右键悔棋
             elif event.button == 3:  # 3 代表鼠标右键

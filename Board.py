@@ -206,47 +206,49 @@ class Board:
                 print("convert error")
         self.board = temp_b
 
-    def count_territory(self):
+    def count_territory(self, max_distance=4):
+        from collections import deque
         n = len(self.board)
         dx = [-1, 0, 1, 0]
         dy = [0, 1, 0, -1]
         visited = [[False] * n for _ in range(n)]
-        black_territory = 0
-        white_territory = 0
+
         black_pos = []
         white_pos = []
 
-        def dfs(x, y, color):
-            nonlocal black_territory, white_territory
-            if not (0 <= x < n and 0 <= y < n) or visited[x][y] or self.board[x][y] != 0:
-                return color
-            visited[x][y] = True
-            if color == 1:
-                black_territory += 1
-                black_pos.append((x, y))
-            elif color == -1:
-                white_territory += 1
-                white_pos.append((x, y))
-            for i in range(4):
-                new_x = x + dx[i]
-                new_y = y + dy[i]
-                if 0 <= new_x < n and 0 <= new_y < n:
-                    if self.board[new_x][new_y] != 0:
-                        if color is None:
-                            color = self.board[new_x][new_y]
-                        elif color != self.board[new_x][new_y]:
-                            return 0
-                    else:
-                        temp = dfs(new_x, new_y, color)
-                        if temp == 0:
-                            return 0
-                        elif color is None:
-                            color = temp
-            return color
+        def bfs(x, y):
+            queue = deque([(x, y, 0)])
+            current_positions = [(x, y)]
+            while queue:
+                x, y, distance = queue.popleft()
+                boundary = set()
+                for i in range(4):
+                    new_x = x + dx[i]
+                    new_y = y + dy[i]
+                    if 0 <= new_x < n and 0 <= new_y < n:
+                        if self.board[new_x][new_y] != 0:
+                            boundary.add(self.board[new_x][new_y])
+                        elif not visited[new_x][new_y] and distance + 1 <= max_distance:
+                            queue.append((new_x, new_y, distance + 1))
+                            visited[new_x][new_y] = True
+                            current_positions.append((new_x, new_y))
+                if len(boundary) == 1:
+                    color = list(boundary)[0]
+                    if color == 1:
+                        black_pos.extend(current_positions)
+                    elif color == -1:
+                        white_pos.extend(current_positions)
+                    return
 
         for i in range(n):
             for j in range(n):
                 if self.board[i][j] == 0 and not visited[i][j]:
-                    dfs(i, j, None)
+                    bfs(i, j)
 
-        return black_territory, white_territory, black_pos, white_pos
+        black_pos = set(black_pos)
+        white_pos = set(white_pos)
+        return len(black_pos), len(white_pos), black_pos, white_pos
+
+
+
+

@@ -52,9 +52,7 @@ class Board:
         return moves
 
     def white_move(self, x, y):
-        if self.Ko and x == self.last_Ko_x and y == self.last_Ko_y:
-            return "Ko error"
-        elif self.board[x][y] != 0:
+        if self.board[x][y] != 0:
             return "Stone error"
         self.board[x][y] = -1
         captured = self.check_capture(-1, x, y)
@@ -66,6 +64,8 @@ class Board:
                 return "Suicide error"
         # 如果只吃一子，检测打劫
         elif captured == 1:
+            if self.Ko and x == self.last_Ko_x and y == self.last_Ko_y:
+                return "Ko error"
             self.ko_check(x, y)
         else:
             self.Ko = False
@@ -242,16 +242,17 @@ class Board:
                 #         white_pos.extend(current_positions)
                 #     return
 
-                # if boundary == {1}:  # Check if all adjacent positions are black stones
-                #     black_pos.extend(current_positions)
-                # elif boundary == {-1}:  # Check if all adjacent positions are white stones
-                #     white_pos.extend(current_positions)
-                # return
-
-                if 1 in boundary:  # Check if black is present in the boundary
+                if boundary == {1}:  # Check if all adjacent positions are black stones
                     black_pos.extend(current_positions)
-                elif -1 in boundary:  # Check if white is present in the boundary
+                elif boundary == {-1}:  # Check if all adjacent positions are white stones
                     white_pos.extend(current_positions)
+                # return
+                # if boundary.count(1) == boundary.count(-1):
+                #     continue
+                # elif 1 in boundary:  # Check if black is present in the boundary
+                #     black_pos.extend(current_positions)
+                # elif -1 in boundary:  # Check if white is present in the boundary
+                #     white_pos.extend(current_positions)
 
         for i in range(n):
             for j in range(n):

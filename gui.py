@@ -48,6 +48,17 @@ def draw_board():
                          (X_OFFSET, i * CELL_SIZE + Y_OFFSET),
                          (X_OFFSET + BOARD_LENGTH, i * CELL_SIZE + Y_OFFSET))
 
+        # 添加 x 轴坐标
+        font = pygame.font.Font(None, 24)
+        text = font.render(str(i), True, BLACK)
+        text_rect = text.get_rect(center=(X_OFFSET + i * CELL_SIZE, Y_OFFSET - 20))
+        window.blit(text, text_rect)
+
+        # 添加 y 轴坐标
+        text = font.render(str(i), True, BLACK)
+        text_rect = text.get_rect(center=(X_OFFSET - 20, Y_OFFSET + i * CELL_SIZE))
+        window.blit(text, text_rect)
+
     # 边框
     offset = 10
     line_width = 2
@@ -87,7 +98,7 @@ def draw_board():
 
     # 渲染当前颜色
     x_offset = X_OFFSET + CELL_SIZE * 9
-    y_offset = Y_OFFSET - CELL_SIZE
+    y_offset = Y_OFFSET + CELL_SIZE * (BOARD_SIZE + 1)
 
     pygame.draw.circle(window, BLACK, (x_offset, y_offset), PIECE_SIZE)
     pygame.draw.circle(window, CURRENT_COLOR, (x_offset, y_offset), PIECE_SIZE - 1)

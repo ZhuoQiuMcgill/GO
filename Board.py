@@ -206,7 +206,7 @@ class Board:
                 print("convert error")
         self.board = temp_b
 
-    def count_territory(self, max_distance=4):
+    def count_territory(self, max_distance=5):
         from collections import deque
         n = len(self.board)
         dx = [-1, 0, 1, 0]
@@ -219,9 +219,10 @@ class Board:
         def bfs(x, y):
             queue = deque([(x, y, 0)])
             current_positions = [(x, y)]
+            boundary = set()
             while queue:
                 x, y, distance = queue.popleft()
-                boundary = set()
+                # boundary = set()
                 for i in range(4):
                     new_x = x + dx[i]
                     new_y = y + dy[i]
@@ -232,13 +233,25 @@ class Board:
                             queue.append((new_x, new_y, distance + 1))
                             visited[new_x][new_y] = True
                             current_positions.append((new_x, new_y))
-                if len(boundary) == 1:
-                    color = list(boundary)[0]
-                    if color == 1:
-                        black_pos.extend(current_positions)
-                    elif color == -1:
-                        white_pos.extend(current_positions)
-                    return
+                # if len(boundary) == 1:
+                #     color = list(boundary)[0]
+                #     print(current_positions, x, y, color)
+                #     if color == 1:
+                #         black_pos.extend(current_positions)
+                #     elif color == -1:
+                #         white_pos.extend(current_positions)
+                #     return
+
+                # if boundary == {1}:  # Check if all adjacent positions are black stones
+                #     black_pos.extend(current_positions)
+                # elif boundary == {-1}:  # Check if all adjacent positions are white stones
+                #     white_pos.extend(current_positions)
+                # return
+
+                if 1 in boundary:  # Check if black is present in the boundary
+                    black_pos.extend(current_positions)
+                elif -1 in boundary:  # Check if white is present in the boundary
+                    white_pos.extend(current_positions)
 
         for i in range(n):
             for j in range(n):
